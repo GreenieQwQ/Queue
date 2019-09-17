@@ -3,9 +3,14 @@
 
 #include <cstdlib>
 #include <ctime>
+#define UT 10
 
 class customer
 {
+public:
+    static const int NID = -1; //未分配顺序号时的顺序号
+    static const int upperTime = UT; //顾客服务时间的上界UT
+
 public:
     customer();
     void setTime(int t)
@@ -16,8 +21,6 @@ public:
     { id = _id; }
     int getId() const
     { return id; }
-    static const int NID = -1; //未分配顺序号时的顺序号
-    static const int upperTime = 10; //顾客服务时间的上界
 private:
     int _time; //等待时间
     int id; //顺序号
