@@ -10,17 +10,19 @@ class customer
 public:
     static const int NID = -1; //未分配顺序号时的顺序号
     static const int upperTime = UT; //顾客服务时间的上界UT
-
+    static int count; //用顾客的人数作为种子
 public:
-    customer();
+    customer(int _id = NID, int _time = 0);
 
 public:
     void setDealingTime(int t)
     { dealingTime = t; }
     int getDealingTime() const
     { return dealingTime; }
-    void increaseWaitingTime()
-    { waitingTime++; } //增加等待的时间
+    int getEnqueueTime() const
+    { return enqueueTime; }
+    void setWaitingTime(int _time)
+    { waitingTime = _time; }
     int getWaitingTime() const
     { return waitingTime; }
     void setId(int _id) //分配顺序号
@@ -29,13 +31,17 @@ public:
     { return id; }
 private:
     int dealingTime; //所需服务时间
-    int waitingTime; //等待的时间
+    int enqueueTime; //入队的时间
+    int waitingTime; //等待的时间 出队才计算好
     int id; //顺序号
 };
 
-customer::customer(): id(NID), waitingTime(0)
+int customer::count = 0;
+
+customer::customer(int _id, int _time): id(_id), enqueueTime(_time), waitingTime(0)
 {
-    srand(time(NULL)); 
+    count++;
+    srand(time(NULL)+count);
     setDealingTime(rand() % upperTime + 1); // 在1-upperTime内随机分配服务s时间
 }
 
@@ -43,7 +49,7 @@ class window
 {
 public:
     window();
-    
+
 public:
     void loadCustomer(customer); //服务一个新的顾客并将等待时间设置为此顾客的服务时间；
     void dealing(); // 窗口等待时间减少一个单位;
