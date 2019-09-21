@@ -13,8 +13,8 @@ g++ simulator-multi.cpp
 
 关于模拟的假设：  
 认为时间单位为1s，默认营业时间为50s，如需修改可以在simulator-single/multi.cpp中宏定义的  
-#define RUNNING_TIME 50    
-将参数50改为想要的营业时间。  
+#define RUNNING_TIME 40    
+将参数40改为想要的营业时间。  
 
 假设在开始服务前无人排队，顾客服务时间服从2-6秒的均匀分布，顾客流量的分析见实验报告。  
 
