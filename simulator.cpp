@@ -5,10 +5,9 @@
 #include <unistd.h>
 #elif defined WINDOWS
 #include <windows.h>
-#include
 #endif
 
-#define RUNNING_TIME 50
+#define RUNNING_TIME 50 //模拟时间
 
 int main()
 {
@@ -24,7 +23,13 @@ int main()
         sleep(1);
     #elif defined WINDOWS
         Sleep(1000);
-    #endif    
-        system("clear");
+    #endif
+    
+    if( time != 0) //不清空最后的结果    
+        #ifdef UNIX
+            system("clear");
+        #elif defined WINDOWS
+            system("cls");
+        #endif    
     }
 }
