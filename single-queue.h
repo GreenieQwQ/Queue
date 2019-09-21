@@ -13,7 +13,7 @@
 #include <cmath>
 using namespace std;
 #define WINDOWS_NUM 5
-#define MAX_CUSTOMER_NUM 2.4 //高峰期的顾客流量
+#define MAX_CUSTOMER_NUM 2.3 //高峰期的顾客流量
 #define PRECISION 100000 //概率计算的精度
 
 
@@ -33,7 +33,7 @@ public:
 protected:
     vector<window> windows{windows_num}; //windows_num个窗口
     queue<customer> customerQueue;//顾客队列
-    vector<customer> customerOut; //服务完毕的顾客
+    vector<customer> customerOut; //出队的顾客
     int totalCustomerNumber; //总共入队顾客的人数
     double totalWaitingTime; //顾客等待的时间数的和
     int timePassed; //从开始模拟到现在经过的时间
@@ -69,7 +69,7 @@ double singleQueueManager::factorial(int k) const
 
 double singleQueueManager::poisson(int k, int lamda) const
 {
-    return pow(lamda,k) * exp(-lamda) / factorial(k);
+    return pow(lamda,k) * exp(-lamda) / factorial(k); //由公式计算
 }
 
 double singleQueueManager::distribute(int time) const
@@ -166,7 +166,7 @@ void singleQueueManager::dispCurrentNum() const
 {
     dispHeader("目前等待顾客人数");
 
-    dispData((int)customerQueue.size(), "men");
+    dispData((int)customerQueue.size(), "men"); //打印的为整型数据
 }
 
 int singleQueueManager::getWaitingTime(const customer& c) const
@@ -225,7 +225,7 @@ void singleQueueManager::dispResult() const
 
 void singleQueueManager::processing()
 {
-    if(timePassed <= runnning_time) //若小于营业时间
+    if(timePassed <= runnning_time) //若经过的时间小于营业时间
         enqueue(); //入队随机人数
     
     for (int i = 0; i < windows_num; i++)

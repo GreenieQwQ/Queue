@@ -8,10 +8,10 @@ class multiQueueManager: public singleQueueManager
 public:
     multiQueueManager(int t): singleQueueManager(t) {} //继承单队列
     void processing(); //往下一个时间单位
-    int realSize(int index) const; //返回下标为index的窗口队列的真实长度
     bool empty() const;//判断是否仍有顾客
 protected:
     vector< queue<customer> > windowsQueue{WINDOWS_NUM};//每个窗口前的队列
+    int realSize(int index) const; //返回下标为index的窗口队列的真实长度    
     void enqueue(); //重载入队函数 较之前多了给五个窗口的队伍分配顾客的操作
     void dispCurrentNum() const; // 重载打印目前等待顾客的人数 细化到每个窗口的队伍
 };
