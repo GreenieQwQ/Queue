@@ -1,7 +1,7 @@
 #ifndef SINGLE_H
 #define SINGLE_H
 
-#include "Queue.h"
+#include "customer-window.h"
 #include <cstdlib>
 #include <ctime>
 #include <vector>
@@ -28,7 +28,7 @@ public:
     void processing();//往下一个时间单位
     void display() const;//打印信息
 
-private:
+protected:
     vector<window> windows{windows_num}; //windows_num个窗口
     queue<customer> customerQueue;//顾客队列
     vector<customer> customerOut; //服务完毕的顾客
@@ -39,12 +39,13 @@ private:
     void init(); //初始化顾客队列
     void enqueue(); //入队随机人数
     void addWaitingRecord(const customer&); //增加一条顾客等待时间的记录
-    void dispSequence() const; //打印顺序号
-    void dispCurrentNum() const; // 打印目前等待顾客的人数
-    void dispWaitingTime() const; //打印每个顾客可得到服务之前的等待时间单位数
-    void dispResult() const; //打印顾客等待平均时间数，每个窗口处理的顾客数
+    virtual void dispSequence() const; //打印顺序号 用虚函数便于子类重载调用时display不需重写
+    virtual void dispCurrentNum() const; // 打印目前等待顾客的人数
+    virtual void dispWaitingTime() const; //打印每个顾客可得到服务之前的等待时间单位数
+    virtual void dispResult() const; //打印顾客等待平均时间数，每个窗口处理的顾客数
     void dispHeader(const string&) const; //打印题头
     void dispData(int, const string&) const; //打印一行数据
+    void dispWindowsName() const; //打印窗口名
     double factorial(int k) const; //返回k的阶乘
     double possion(int k, int lamda) const; //泊松分布对应k的值
 };
@@ -117,13 +118,17 @@ void singleQueueManager::dispData(int data, const string& str) const
     << data << " " << str;
 }
 
-void singleQueueManager::dispSequence() const
+void singleQueueManager::dispWindowsName() const
 {
-    dispHeader("窗口正在办理的顾客顺序号"); //打印的为此时间单位结束时的结果
-    
     for( int i = 0; i < windows_num; ++i)
         cout << setfill(' ') << setw(6) << (char)('A' + i); //打印窗口名
     cout << endl;
+}
+
+void singleQueueManager::dispSequence() const
+{
+    dispHeader("窗口正在办理的顾客顺序号"); //打印的为此时间单位结束时的结果
+    dispWindowsName(); //打印窗口名
 
     for( int i = 0; i < windows_num; ++i)
     {
@@ -191,9 +196,7 @@ void singleQueueManager::dispResult() const
         dispData((double)totalWaitingTime/ customerOut.size(), "second"); //打印时间
     
     dispHeader("每个窗口处理顾客数"); 
-    for( int i = 0; i < windows_num; ++i)
-        cout << setfill(' ') << setw(6) << (char)('A' + i); //打印窗口名
-    cout << endl; 
+    dispWindowsName();
     for( int i = 0; i < windows_num; ++i)
         cout << setw(6) << windows[i].getNumber(); //打印处理数 
 }
@@ -208,7 +211,8 @@ void singleQueueManager::processing()
             if(!customerQueue.empty())//若顾客队列仍有人排队 将队头顾客安排
             {
                 customerQueue.front().setWaitingTime( getWaitingTime( customerQueue.front() ) );
-                windows[i].loadCustomer(customerQueue.front());
+                //顾客出队时将现时间和其入队时间相减即可得到此顾客的等待时间
+                windows[i].loadCustomer(customerQueue.front());//安排
                 customerOut.push_back(customerQueue.front()); //此顾客属于服务完毕的顾客
                 totalWaitingTime += getWaitingTime(customerQueue.front()); //总共等待时间增加
                 customerQueue.pop();//此顾客出队
