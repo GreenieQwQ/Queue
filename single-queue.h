@@ -24,7 +24,7 @@ public:
 public:
     singleQueueManager(): totalCustomerNumber(0), totalWaitingTime(0), timePassed(0)
     {
-        init();
+        // init(); //给队伍预载人数
     }
     void processing();//往下一个时间单位
     void display() const;//打印信息

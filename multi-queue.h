@@ -2,34 +2,41 @@
 #define MULTI_H
 
 #include "single-queue.h"
-#include <algorithm>
-
-class Queue: public queue<customer>
-{
-public:
-    bool operator<(const Queue& rhs) //重载运算符 使得能使用min_element函数
-    {
-        return this->size() < rhs.size();
-    }
-};
 
 class multiQueueManager: public singleQueueManager
 {
 public:
     void processing(); //往下一个时间单位
+    int realSize(int index) const; //返回下标为index的窗口队列的真实长度
 protected:
-    vector< Queue > windowsQueue{WINDOWS_NUM};//每个窗口前的队列
+    vector< queue<customer> > windowsQueue{WINDOWS_NUM};//每个窗口前的队列
     void enqueue(); //重载入队函数 较之前多了给五个窗口的队伍分配顾客的操作
     void dispCurrentNum() const; // 重载打印目前等待顾客的人数 细化到每个窗口的队伍
 };
+
+int multiQueueManager::realSize(int index) const
+{
+    if(windows[index].empty())
+        return windowsQueue[index].size() -1;
+    else
+        return windowsQueue[index].size();
+     //若窗口空闲 则窗口队伍的真实长度减一
+}
 
 void multiQueueManager::enqueue()
 {
     singleQueueManager::enqueue();
     while(!customerQueue.empty())//将总顾客队列的顾客插入五个窗口的最短队列中
     {
-        auto it = min_element(windowsQueue.begin(), windowsQueue.end());
-        (*it).push(customerQueue.front());
+        int minIndex = 0;
+        for (int i = 1; i < windows_num; i++)
+        {
+            if(realSize(i) < realSize(minIndex))
+                minIndex = i;
+        }
+        //通过比较法得到最短队列的索引
+
+        windowsQueue[minIndex].push(customerQueue.front());
         customerQueue.pop();
     }
 }
