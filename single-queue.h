@@ -13,32 +13,36 @@
 #include <cmath>
 using namespace std;
 #define WINDOWS_NUM 5
-#define LAMDA 1 //平均一时间单位内会来LAMDA个人
+#define MAX_CUSTOMER_NUM 2.4 //高峰期的顾客流量
 #define PRECISION 100000 //概率计算的精度
+
 
 class singleQueueManager
 {
 public:
     static const int windows_num = WINDOWS_NUM;
-    static const int lamda = LAMDA;
 public:
-    singleQueueManager(): totalCustomerNumber(0), totalWaitingTime(0), timePassed(0)
+    singleQueueManager(int t): totalCustomerNumber(0), totalWaitingTime(0), timePassed(0), runnning_time(t)
     {
         // init(); //给队伍预载人数
     }
     void processing();//往下一个时间单位
     void display() const;//打印信息
+    bool empty() const; //判断是否还有顾客
 
 protected:
     vector<window> windows{windows_num}; //windows_num个窗口
     queue<customer> customerQueue;//顾客队列
     vector<customer> customerOut; //服务完毕的顾客
     int totalCustomerNumber; //总共入队顾客的人数
-    int totalWaitingTime; //顾客等待的时间数的和
-    int timePassed; //从开始模拟经过的时间
+    double totalWaitingTime; //顾客等待的时间数的和
+    int timePassed; //从开始模拟到现在经过的时间
+    int runnning_time; //营业的时间
+
     int getWaitingTime(const customer&) const;// 计算顾客等待的时间
     void init(); //初始化顾客队列
     void enqueue(); //入队随机人数
+    void dequeue(); //给顾客服务
     void addWaitingRecord(const customer&); //增加一条顾客等待时间的记录
     virtual void dispSequence() const; //打印顺序号 用虚函数便于子类重载调用时display不需重写
     virtual void dispCurrentNum() const; // 打印目前等待顾客的人数
@@ -49,7 +53,8 @@ protected:
     void dispData(double, const string&) const; //打印一行double型数据
     void dispWindowsName() const; //打印窗口名
     double factorial(int k) const; //返回k的阶乘
-    double possion(int k, int lamda) const; //泊松分布对应k的值
+    double distribute(int time) const; //返回对应时间下的先验顾客流量
+    double poisson(int k, int lambda) const; //泊松分布对应k的值
 };
 
 double singleQueueManager::factorial(int k) const
@@ -62,9 +67,16 @@ double singleQueueManager::factorial(int k) const
     return result;
 }
 
-double singleQueueManager::possion(int k, int lamda) const
+double singleQueueManager::poisson(int k, int lamda) const
 {
     return pow(lamda,k) * exp(-lamda) / factorial(k);
+}
+
+double singleQueueManager::distribute(int time) const
+{
+    double a = (double) 4 * MAX_CUSTOMER_NUM / (runnning_time * runnning_time); //获得近似二次函数的系数
+    double result = - a * (time - runnning_time) * time; //根据-ax(x-t)公式计算得到先验流量
+    return result;
 }
 
 void singleQueueManager::enqueue()
@@ -74,10 +86,12 @@ void singleQueueManager::enqueue()
     //用均匀分布possibility落入的区间模拟概率
     double area = 0; 
     //分布函数 X <= k 的区间
+    double lambda = distribute(timePassed);
+    //获得对应时间下的先验顾客流量
 
     for (int i = 0; ; i++)
     {
-        area += possion(i,lamda) * PRECISION; //区间扩张
+        area += poisson(i,lambda) * PRECISION; //区间扩张
         if(possibility < area) //用均匀分布的区间模拟概率
         {
             while(i--) //入队i个顾客 并分配编号 
@@ -201,7 +215,7 @@ void singleQueueManager::dispResult() const
     if(customerOut.size() == 0) //还未有人出队
         cout  << setfill('-') << setw(18) << "No data" << setw(12) << '-';
     else
-        dispData((double)totalWaitingTime/ customerOut.size(), "second"); //打印时间
+        dispData(totalWaitingTime/ customerOut.size(), "second"); //打印时间
     
     dispHeader("每个窗口处理顾客数"); 
     dispWindowsName();
@@ -211,7 +225,9 @@ void singleQueueManager::dispResult() const
 
 void singleQueueManager::processing()
 {
-    enqueue(); //入队随机人数
+    if(timePassed <= runnning_time) //若小于营业时间
+        enqueue(); //入队随机人数
+    
     for (int i = 0; i < windows_num; i++)
     {
         if(windows[i].empty())//若窗口为空
@@ -229,6 +245,17 @@ void singleQueueManager::processing()
         windows[i].dealing();
     }
     timePassed++;    
+}
+
+bool singleQueueManager::empty() const
+{
+    for (int i = 0; i < windows_num; i++)//判断窗口是否有顾客
+    {
+        if(!windows[i].empty())
+            return false;
+    }
+
+    return customerQueue.empty(); //若顾客队伍也没有顾客则空
 }
 
 #endif

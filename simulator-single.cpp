@@ -7,13 +7,13 @@
 #include <windows.h>
 #endif
 
-#define RUNNING_TIME 50 //模拟时间
+#define RUNNING_TIME 40 //默认营业时间
 
 int main()
 {
-    singleQueueManager m; //构建一个单队列的模拟器
-    int time = RUNNING_TIME; //时间设置为模拟时间
-    while(time--) //用循环来模拟时间流逝
+    int time = RUNNING_TIME;
+    singleQueueManager m(time); //构建一个单队列的模拟器
+    while( (time--) > 0 || !m.empty()) //当经过营业时间且没有顾客时停止循环
     {
         m.display(); //打印信息
         m.processing(); //每个时间单位单队列进行模拟
@@ -23,11 +23,11 @@ int main()
         Sleep(1000);
     #endif
     
-    if( time != 0) //最后一秒时不清屏便于观察    
-        #ifdef UNIX
-            system("clear");
-        #elif defined WINDOWS
-            system("cls");
-        #endif    
-    }
+    #ifdef UNIX
+        system("clear"); //清屏便于观察
+    #elif defined WINDOWS
+        system("cls");
+    #endif    
+    } //用循环来模拟时间流逝
+    m.display(); //打印最终结果
 }

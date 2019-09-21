@@ -20,7 +20,7 @@ public:
     bool empty() const
     { return dealingTime == 0; } //判断窗口是否空闲
     bool operator<(const window& rhs) const 
-    { return dealingTime < rhs.dealingTime; } //判断两个窗口哪个等待时间更短
+    { return dealingTime < rhs.dealingTime; } //判断两个窗口哪个等待时间更短 作为备用函数
 
 private:
     customer theCustomer; //处理的顾客
