@@ -46,6 +46,7 @@ protected:
     virtual void dispResult() const; //打印顾客等待平均时间数，每个窗口处理的顾客数
     void dispHeader(const string&) const; //打印题头
     void dispData(int, const string&) const; //打印一行数据
+    void dispData(double, const string&) const; //打印一行数据
     void dispWindowsName() const; //打印窗口名
     double factorial(int k) const; //返回k的阶乘
     double possion(int k, int lamda) const; //泊松分布对应k的值
@@ -115,8 +116,14 @@ void singleQueueManager::dispHeader(const string& head) const
 
 void singleQueueManager::dispData(int data, const string& str) const
 {
-    cout << setfill(' ') << setw(windows_num * 2 - 1) 
-    << data << " " << str;
+    cout << setfill(' ') << setw(windows_num * 2 + 1) 
+    << data << "   " << str;
+}
+
+void singleQueueManager::dispData(double data, const string& str) const
+{
+    cout << setfill(' ') << setw(windows_num * 2 + 1) 
+    << fixed << setprecision(2) << data << "   " << str;
 }
 
 void singleQueueManager::dispWindowsName() const
@@ -145,7 +152,7 @@ void singleQueueManager::dispCurrentNum() const
 {
     dispHeader("目前等待顾客人数");
 
-    dispData(customerQueue.size(), "men");
+    dispData((int)customerQueue.size(), "men");
 }
 
 int singleQueueManager::getWaitingTime(const customer& c) const
