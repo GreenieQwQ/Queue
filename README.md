@@ -22,6 +22,6 @@ g++ simulator-multi.cpp
 强烈推荐将窗口放大一点，便于观察，按F11全屏观看更佳。
 
 Tips:  
-在windows环境下也可模拟Ubuntu环境，只需在windows商店（开始菜单里有）中搜索wsl下载一个Ubuntu18.04内核（笔者开发时的版本），下载完成后在命令行中（vscode下直接在终端中）运行命令：    
+在windows环境下也可模拟Ubuntu环境，只需在windows商店（开始菜单里有）中搜索wsl下载一个Ubuntu18.04内核（笔者开发时使用的版本），下载完成后在命令行中（vscode下直接在终端中）运行命令：    
 wsl    
 即可切换到linux环境
