@@ -8,12 +8,14 @@ g++ simulator-single.cpp
 
 在终端依次输入：  
 g++ simulator-multi.cpp  
-./a.out    
+./a.out  
 即可开始多队列的模拟。  
 
 认为时间单位为1s，默认模拟时间为50s，如需修改可以在simulator-single/multi.cpp中宏定义的  
 #define RUNNING_TIME 50    
 的参数50改为想要的模拟时间。  
+
+强烈推荐将窗口放大一点，便于观察，按F11全屏观看更佳。
 
 Tips:  
 在windows环境下也可模拟Ubuntu环境，只需在windows商店（开始菜单里有）中搜索wsl下载一个Ubuntu18.04内核（笔者开发时的版本），下载完成后在命令行中（vscode下直接在终端中）运行命令：    
