@@ -11,19 +11,19 @@
 
 int main()
 {
-    singleQueueManager m;
-    int time = RUNNING_TIME;
-    while(time--)
+    singleQueueManager m; //构建一个单队列的模拟器
+    int time = RUNNING_TIME; //时间设置为模拟时间
+    while(time--) //用循环来模拟时间流逝
     {
-        m.display();
-        m.processing();
+        m.display(); //打印信息
+        m.processing(); //每个时间单位单队列进行模拟
     #ifdef UNIX
         sleep(1);
     #elif defined WINDOWS
         Sleep(1000);
     #endif
     
-    if( time != 0) //不清空最后的结果    
+    if( time != 0) //最后一秒时不清屏便于观察    
         #ifdef UNIX
             system("clear");
         #elif defined WINDOWS
