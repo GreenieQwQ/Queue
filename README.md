@@ -1,2 +1,6 @@
-# Queue
-first homework
+请一定要在Linux环境下运行！！！因为解码方式的原因在Windows环境下中文会显示乱码，且随机函数较Linux版本下有所变化，
+所以请一定要在Linux环境下运行！！！（虽然模拟程序的源码中将宏由UNIX改为WINDOWS可以在Windows环境下“运行”，但是
+也仅仅能“运行”而已，这个程序在windows下的“运行”并不能很好地处理数据）
+
+Linux下运行方法：
+在终端输入
