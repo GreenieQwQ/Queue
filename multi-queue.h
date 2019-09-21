@@ -6,8 +6,10 @@
 class multiQueueManager: public singleQueueManager
 {
 public:
+    multiQueueManager(int t): singleQueueManager(t) {} //继承单队列
     void processing(); //往下一个时间单位
     int realSize(int index) const; //返回下标为index的窗口队列的真实长度
+    bool empty() const;//判断是否仍有顾客
 protected:
     vector< queue<customer> > windowsQueue{WINDOWS_NUM};//每个窗口前的队列
     void enqueue(); //重载入队函数 较之前多了给五个窗口的队伍分配顾客的操作
@@ -21,6 +23,19 @@ int multiQueueManager::realSize(int index) const
     else
         return windowsQueue[index].size();
      //若窗口空闲 则窗口队伍的真实长度减一
+}
+
+bool multiQueueManager::empty() const
+{
+    for (int i = 0; i < windows_num; i++)//判断窗口和其队伍是否有顾客
+    {
+        if(!windows[i].empty())
+            return false;
+        if(!windowsQueue[i].empty())
+            return false;
+    }
+
+    return true;
 }
 
 void multiQueueManager::enqueue()
