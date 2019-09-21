@@ -13,7 +13,7 @@ g++ simulator-multi.cpp
 
 认为时间单位为1s，默认模拟时间为50s，如需修改可以在simulator-single/multi.cpp中宏定义的  
 #define RUNNING_TIME 50    
-的参数50改为想要的模拟时间。  
+将参数50改为想要的模拟时间。  
 
 强烈推荐将窗口放大一点，便于观察，按F11全屏观看更佳。
 
