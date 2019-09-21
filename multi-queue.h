@@ -59,7 +59,7 @@ void multiQueueManager::processing() //处理方法和single的大致相同 只�
         {
             if(!windowsQueue[i].empty())//若顾客队列仍有人排队 将队头顾客安排 
             {
-                windowsQueue[i].front().setWaitingTime( getWaitingTime( customerQueue.front() ) );
+                windowsQueue[i].front().setWaitingTime( getWaitingTime( windowsQueue[i].front() ) );
                 //顾客出队时将现时间和其入队时间相减即可得到此顾客的等待时间
                 windows[i].loadCustomer(windowsQueue[i].front());//安排
                 customerOut.push_back(windowsQueue[i].front()); //此顾客属于服务完毕的顾客
