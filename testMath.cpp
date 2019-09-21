@@ -4,6 +4,8 @@
 #include <cmath>
 using namespace std;
 
+//仅用来测试数学函数 与主程序无关
+
 double factorial(int k) 
 {
     double result = 1;

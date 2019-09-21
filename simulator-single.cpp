@@ -12,11 +12,9 @@
 int main()
 {
     singleQueueManager m;
-    m.display();
     int time = RUNNING_TIME;
     while(time--)
     {
-        if(time != RUNNING_TIME)
         m.display();
         m.processing();
     #ifdef UNIX
