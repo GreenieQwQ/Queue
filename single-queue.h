@@ -1,7 +1,8 @@
 #ifndef SINGLE_H
 #define SINGLE_H
 
-#include "customer-window.h"
+#include "customer.h"
+#include "window.h"
 #include <cstdlib>
 #include <ctime>
 #include <vector>
@@ -78,7 +79,7 @@ void singleQueueManager::enqueue()
         area += possion(i,lamda) * PRECISION; //区间扩张
         if(possibility < area) //用均匀分布的区间模拟概率
         {
-            while(i--) //入队i个顾客 并分配编号
+            while(i--) //入队i个顾客 并分配编号 
                 customerQueue.push(customer(++totalCustomerNumber, timePassed)); //分配编号为加上这个顾客总共入队顾客的人数
             return;
         }
