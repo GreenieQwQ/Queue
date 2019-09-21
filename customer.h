@@ -42,7 +42,7 @@ customer::customer(int _id, int _time): id(_id), enqueueTime(_time), waitingTime
 {
     count++;
     srand(time(NULL)+count);
-    setDealingTime(rand() % upperTime + 1); // 在1-upperTime内随机分配服务s时间
+    setDealingTime(rand() % upperTime + 1); // 在1-upperTime内随机分配服务时间
 }
 
 

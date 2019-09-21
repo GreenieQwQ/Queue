@@ -43,7 +43,7 @@ void window::loadCustomer(customer Customer)
 
 void window::dealing()
 {
-    if(!empty())
+    if(!empty()) //窗口有人的时候才服务
         dealing(1);
 }
 

@@ -45,8 +45,8 @@ protected:
     virtual void dispWaitingTime() const; //打印每个顾客可得到服务之前的等待时间单位数
     virtual void dispResult() const; //打印顾客等待平均时间数，每个窗口处理的顾客数
     void dispHeader(const string&) const; //打印题头
-    void dispData(int, const string&) const; //打印一行数据
-    void dispData(double, const string&) const; //打印一行数据
+    void dispData(int, const string&) const; //打印一行int型数据
+    void dispData(double, const string&) const; //打印一行double型数据
     void dispWindowsName() const; //打印窗口名
     double factorial(int k) const; //返回k的阶乘
     double possion(int k, int lamda) const; //泊松分布对应k的值
@@ -116,11 +116,11 @@ void singleQueueManager::dispHeader(const string& head) const
 
 void singleQueueManager::dispData(int data, const string& str) const
 {
-    cout << setfill(' ') << setw(windows_num * 2 + 1) 
+    cout << setfill(' ') << setw(windows_num * 2 + 1) //打印int型数据的格式
     << data << "   " << str;
 }
 
-void singleQueueManager::dispData(double data, const string& str) const
+void singleQueueManager::dispData(double data, const string& str) const //打印double型数据的格式
 {
     cout << setfill(' ') << setw(windows_num * 2 + 1) 
     << fixed << setprecision(2) << data << "   " << str;
@@ -219,7 +219,7 @@ void singleQueueManager::processing()
             if(!customerQueue.empty())//若顾客队列仍有人排队 将队头顾客安排
             {
                 customerQueue.front().setWaitingTime( getWaitingTime( customerQueue.front() ) );
-                //顾客出队时将现时间和其入队时间相减即可得到此顾客的等待时间
+                //顾客出队时将现时间和其入队时间相减即可得到此顾客的等待时间 并将等待时间记录
                 windows[i].loadCustomer(customerQueue.front());//安排
                 customerOut.push_back(customerQueue.front()); //此顾客属于服务完毕的顾客
                 totalWaitingTime += getWaitingTime(customerQueue.front()); //总共等待时间增加
