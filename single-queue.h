@@ -13,7 +13,7 @@
 #include <cmath>
 using namespace std;
 #define WINDOWS_NUM 5
-#define MAX_CUSTOMER_NUM 2.3 //高峰期的顾客流量
+#define MAX_CUSTOMER_NUM 2.2 //高峰期的顾客流量
 #define PRECISION 100000 //概率计算的精度
 
 
@@ -48,6 +48,7 @@ protected:
     virtual void dispCurrentNum() const; // 打印目前等待顾客的人数
     virtual void dispWaitingTime() const; //打印每个顾客可得到服务之前的等待时间单位数
     virtual void dispResult() const; //打印顾客等待平均时间数，每个窗口处理的顾客数
+    virtual void dispTime() const; //打印模拟系统运行的时间
     void dispHeader(const string&) const; //打印题头
     void dispData(int, const string&) const; //打印一行int型数据
     void dispData(double, const string&) const; //打印一行double型数据
@@ -114,6 +115,7 @@ void singleQueueManager::display() const
     dispCurrentNum();
     dispWaitingTime();
     dispResult();
+    dispTime();
     cout << endl;
     cout << setfill('=') << setw(windows_num * 6  ) << '=' << endl;
     cout << endl;
@@ -179,7 +181,7 @@ void singleQueueManager::dispWaitingTime() const
     dispHeader("每个顾客得到服务前的等待时间单位数");
     cout << setfill(' ') << setw(10) << "Customer" << setw(10) << "Time";  
     
-    #define colunm 3 //定义打印的列数
+    #define colunm 4 //定义打印的列数
     for (int i = 0; i < colunm - 1; i++)
         cout << setfill(' ') << setw(3) << "|" << setw(12) << "Customer" << setw(10) << "Time"; //打印表头
     
@@ -215,12 +217,18 @@ void singleQueueManager::dispResult() const
     if(customerOut.size() == 0) //还未有人出队
         cout  << setfill('-') << setw(18) << "No data" << setw(12) << '-';
     else
-        dispData(totalWaitingTime/ customerOut.size(), "second"); //打印时间
+        dispData(totalWaitingTime/ customerOut.size(), "seconds"); //打印时间
     
     dispHeader("每个窗口处理顾客数"); 
     dispWindowsName();
     for( int i = 0; i < windows_num; ++i)
         cout << setw(6) << windows[i].getNumber(); //打印处理数 
+}
+
+void  singleQueueManager::dispTime() const
+{
+    dispHeader("模拟系统运行的时间");
+    dispData((int)timePassed, "seconds");
 }
 
 void singleQueueManager::processing()
@@ -242,9 +250,9 @@ void singleQueueManager::processing()
                 customerQueue.pop();//此顾客出队
             }
         }
-        windows[i].dealing();
+        windows[i].dealing(); //剩余服务时间减一
     }
-    timePassed++;    
+    timePassed++; //总模拟时间加一    
 }
 
 bool singleQueueManager::empty() const

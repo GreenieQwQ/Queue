@@ -89,9 +89,9 @@ void multiQueueManager::processing() //处理方法和single的大致相同 只�
                 windowsQueue[i].pop();//此顾客出队
             }
         }
-        windows[i].dealing();
+        windows[i].dealing(); //剩余服务时间减一
     }
-    timePassed++;
+    timePassed++; //经过时间加一
 }
 
 #endif 

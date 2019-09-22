@@ -13,10 +13,12 @@ int main()
 {
     int time = RUNNING_TIME;
     singleQueueManager m(time); //构建一个单队列的模拟器
-    while( (time--) > 0 || !m.empty()) //当经过营业时间且没有顾客时停止循环
+    
+    while( (time--) > 0 || !m.empty()) //当营业时间结束且没有顾客时停止循环
     {
         m.display(); //打印信息
         m.processing(); //每个时间单位单队列进行模拟
+    
     #ifdef UNIX
         sleep(1);
     #elif defined WINDOWS
@@ -29,5 +31,6 @@ int main()
         system("cls");
     #endif    
     } //用循环来模拟时间流逝
+    
     m.display(); //打印最终结果
 }
